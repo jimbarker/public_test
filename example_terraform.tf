@@ -16,7 +16,6 @@ provider "aws" {
 
 locals {
   common_tags = {
-    # Repo               = "public_test"
     CreatedBy = "Terraform"
     Owner     = "Test Project"
   }
