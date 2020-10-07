@@ -15,8 +15,6 @@ jobs:
           ls
           curl https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
           output=""
-          output+="pwd"
-          output+="ls"
           section=$(tflint -f json --force --config=./.tflint.hcl $d |jq -c '.issues[] | "ISSUE FOUND: (\(.rule.name)) in \(.range.filename) line \(.range.start.line) - \(.range.end.line)¡"')
           output+=$(if [ ${#section} -gt 1 ] ; then echo "***ISSUE(S) FOUND IN ROOT FOLDER***:¡${section}¢"; fi);
           for d in $(find ./ -type d) ;do
@@ -24,6 +22,8 @@ jobs:
             output+=$(if [ ${#section} -gt 1 ] ; then echo "***ISSUE(S) FOUND IN ${d}***:¡${section}¢"; fi);
           done
           output=$( echo $output | sed -e 's/"//g' )
+          output=$(pwd)
+          output=$(ls)
           IFS='¢' read -r -a array <<< "$output"
           if [ ${#array[@]} -gt 0 ]; then echo '::set-output name=COMMENT::true'; else echo '::set-output name=COMMENT::false'; fi
           for i in "${array[@]}"
