@@ -15,3 +15,5 @@ jobs:
           tf_actions_subcommand: 'fmt'
           tf_actions_working_dir: '.'
           tf_actions_comment: true
+        env:
+          GITHUB_TOKEN = ${{ secrets.REPOCOMMIT }}
