@@ -14,15 +14,11 @@ provider "aws" {
   region  = "eu-west-2"
 }
 
-locals {
-  common_tags = {
-    CreatedBy = "Terraform"
-    Owner     = "Test Project"
-  }
-}
-
 resource "aws_instance" "example" {
   ami           = "ami-a4b950c3"
   instance_type = "t2.micro"
-  tags          = local.common_tags
+  tags = {
+    CreatedBy = "Terraform"
+    Owner     = "Test Project"
+  }
 }
