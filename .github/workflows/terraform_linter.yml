@@ -22,8 +22,6 @@ jobs:
             output+=$(if [ ${#section} -gt 1 ] ; then echo "***ISSUE(S) FOUND IN ${d}***:¡${section}¢"; fi);
           done
           output=$( echo $output | sed -e 's/"//g' )
-          output=$(pwd)
-          output=$(ls)
           IFS='¢' read -r -a array <<< "$output"
           if [ ${#array[@]} -gt 0 ]; then echo '::set-output name=COMMENT::true'; else echo '::set-output name=COMMENT::false'; fi
           for i in "${array[@]}"
