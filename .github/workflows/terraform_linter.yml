@@ -3,20 +3,11 @@ on:
   - pull_request
 jobs:
   terraform:
-    name: 'Terraform fmt'
+    name: 'tflint'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
         uses: actions/checkout@main
-      - name: 'Terraform Format'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.13.3
-          tf_actions_subcommand: 'fmt'
-          tf_actions_working_dir: '.'
-          tf_actions_comment: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPOCOMMIT }}
       - name: tflint
         id: tflint
         run: |
@@ -24,10 +15,10 @@ jobs:
           ls
           curl https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
           output=""
-          section=$(tflint -f json --force --disable-rule=aws_cloudwatch_log_group_invalid_name --config=./.tflint.hcl $d |jq -c '.issues[] | "ISSUE FOUND: (\(.rule.name)) in \(.range.filename) line \(.range.start.line) - \(.range.end.line)¡"')
+          section=$(tflint -f json --force --config=./.tflint.hcl $d |jq -c '.issues[] | "ISSUE FOUND: (\(.rule.name)) in \(.range.filename) line \(.range.start.line) - \(.range.end.line)¡"')
           output+=$(if [ ${#section} -gt 1 ] ; then echo "***ISSUE(S) FOUND IN ROOT FOLDER***:¡${section}¢"; fi);
-          for d in $(find ./modules -type d) ;do
-            section=$(tflint -f json --force --disable-rule=aws_cloudwatch_log_group_invalid_name --config=./.tflint.hcl $d |jq -c '.issues[] | "ISSUE FOUND: (\(.rule.name)) in \(.range.filename) line \(.range.start.line) - \(.range.end.line)¡"')
+          for d in $(find ./ -type d) ;do
+            section=$(tflint -f json --force --config=./.tflint.hcl $d |jq -c '.issues[] | "ISSUE FOUND: (\(.rule.name)) in \(.range.filename) line \(.range.start.line) - \(.range.end.line)¡"')
             output+=$(if [ ${#section} -gt 1 ] ; then echo "***ISSUE(S) FOUND IN ${d}***:¡${section}¢"; fi);
           done
           output=$( echo $output | sed -e 's/"//g' )
