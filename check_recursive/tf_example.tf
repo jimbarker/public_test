@@ -16,8 +16,8 @@ provider "aws" {
 
 locals {
   common_tags = {
-    Repo               = "public_test"
-    CreatedBy          = "Terraform"
+    Repo      = "public_test"
+    CreatedBy = "Terraform"
     # Owner              = "Test Project"
   }
 }
@@ -25,5 +25,5 @@ locals {
 resource "aws_instance" "example" {
   ami           = "ami-a4b950c3"
   instance_type = "t2.micro"
-  tags = local.common_tags
+  tags          = local.common_tags
 }
