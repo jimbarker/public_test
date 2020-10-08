@@ -40,3 +40,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPOCOMMIT }}
         with:
           filename: comment.md
+      - name: Fail if there are comments
+        if: steps.tflint.outputs.COMMENT == 'true'
+        run: exit 1
