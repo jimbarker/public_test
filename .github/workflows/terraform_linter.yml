@@ -33,7 +33,7 @@ jobs:
                 done
               echo -e "\`\`\` \n" >> .github/workflows/comment.md
             done
-      - name: Add checkout commands
+      - name: Add comments if there are any
         uses: harupy/comment-on-pr@master
         if: steps.tflint.outputs.COMMENT == 'true'
         env:
