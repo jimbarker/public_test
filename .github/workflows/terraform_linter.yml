@@ -43,5 +43,3 @@ jobs:
       - name: Fail job if comments
         if: steps.tflint.outputs.COMMENT == 'true'
           run: exit 1
-      - name: Print success message if we don't exit at the last step
-        run: echo success!
