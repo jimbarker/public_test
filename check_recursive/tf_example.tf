@@ -20,6 +20,6 @@ resource "aws_instance" "example" {
   tags = {
     Repo      = "public_test"
     CreatedBy = "Terraform"
-        Owner     = "Test Project"
+    Owner     = "Test Project"
   }
 }
