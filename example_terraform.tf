@@ -18,7 +18,7 @@ resource "aws_instance" "example" {
   ami           = "ami-a4b950c3"
   instance_type = "t2.micro"
   tags = {
-    Repo      = "public_test"
+    # Repo      = "public_test"
     CreatedBy = "Terraform"
     Owner     = "Test Project"
   }
