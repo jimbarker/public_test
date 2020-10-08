@@ -15,8 +15,6 @@ jobs:
           ls
           curl https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
           output=""
-          section=$(tflint -f json --force --config=./.tflint.hcl $d |jq -c '.issues[] | "ISSUE FOUND: (\(.rule.name)) in \(.range.filename) line \(.range.start.line) - \(.range.end.line)¡"')
-          output+=$(if [ ${#section} -gt 1 ] ; then echo "***ISSUE(S) FOUND IN ROOT FOLDER***:¡${section}¢"; fi);
           for d in $(find ./ -type d) ;do
             section=$(tflint -f json --force --config=./.tflint.hcl $d |jq -c '.issues[] | "ISSUE FOUND: (\(.rule.name)) in \(.range.filename) line \(.range.start.line) - \(.range.end.line)¡"')
             output+=$(if [ ${#section} -gt 1 ] ; then echo "***ISSUE(S) FOUND IN ${d}***:¡${section}¢"; fi);
@@ -35,10 +33,13 @@ jobs:
                 done
               echo -e "\`\`\` \n" >> .github/workflows/comment.md
             done
-      - name: Add checkout commands
+      - name: Add comments if there are any
         uses: harupy/comment-on-pr@master
         if: steps.tflint.outputs.COMMENT == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.REPOCOMMIT }}
         with:
           filename: comment.md
+      - name: Fail if there are comments
+        if: steps.tflint.outputs.COMMENT == 'true'
+        run: exit 1
