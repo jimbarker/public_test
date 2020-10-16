@@ -3,13 +3,8 @@ import boto3
 print("## Purpose")
 print("The purpose of this page is to maintain a mapping of which DataWorks S3 buckets are used for what purpose.\n")
 # List of environments
-environments = ["Development",
-                "QA",
-                "Integration",
-                "Preprod",
-                "Production",
-                "Management-Dev",
-                "Management"]
+with open("environments.txt") as file:
+    environments = file.read().splitlines()
 # Get a list of buckets for each environment
 for environment in environments:
     print("## {0}\n".format(environment))
@@ -35,4 +30,3 @@ for environment in environments:
         # Print a list of bucket names
         print("| {0} | {1} |".format(bucket_id, bucket_name_tag))
     print("\n\n")
-    
